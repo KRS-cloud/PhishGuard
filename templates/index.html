@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard - AI Website Safety Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">🛡️ PhishGuard</div>
+            <p class="subtitle">AI-Powered Zero-Day Phishing Detection Engine</p>
+        </header>
+
+        <main class="main-content">
+            <div class="card search-card">
+                <h2>Analyze a URL</h2>
+                <p class="card-desc">Enter any website link below to inspect its structural integrity using our trained Random Forest Model.</p>
+                
+                <form action="/predict" method="POST" class="scan-form">
+                    <div class="input-group">
+                        <input type="text" name="url_input" id="url_input" placeholder="https://example-secure-login.com" required value="{{ url if url else '' }}">
+                        <button type="submit" class="btn-submit">Scan Link</button>
+                    </div>
+                </form>
+
+                {% if error %}
+                <div class="alert alert-error">
+                    ⚠️ <strong>Error:</strong> {{ error }}
+                </div>
+                {% endif %}
+
+                <div class="developer-credit">
+                    🚀 Developed by Pankaj Pawar
+                </div>
+            </div>
+
+            {% if scanned %}
+            <div class="card result-card {{ color }}">
+                <div class="result-header">
+                    <span class="verdict-badge badge-{{ color }}">{{ status }}</span>
+                    <span class="scanned-url">Target: <code>{{ url }}</code></span>
+                </div>
+                
+                <div class="result-body">
+                    <p class="verdict-message">{{ message }}</p>
+                    
+                    <div class="risk-analysis">
+                        <div class="risk-label-group">
+                            <span class="risk-label">Calculated Phishing Risk:</span>
+                            <span class="risk-percentage">{{ risk_score }}%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-{{ color }}" style="width: {{ risk_score }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; PhishGuard Core Engine. Built for B.Tech Mini-Project Submission.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
